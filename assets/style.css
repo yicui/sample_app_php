@@ -1,0 +1,98 @@
+* {
+  margin:0;
+  padding:0;
+}
+body{
+  width:800px;
+  margin:auto;
+  font-family:Arial, helvetica, Verdana, San-Serif;
+  font-size:20px;
+}
+html, body {
+  height:100%;
+}
+h1 {
+  font-size:2em;
+}
+p {
+  text-indent:2.5em;
+  font-size:0.875em;
+}
+#container {
+  min-height:100%;
+  margin-bottom:-30px;
+}
+#header {
+  text-align:center;  
+  background-image:-webkit-linear-gradient(90deg, red, white);
+  background-image:-moz-linear-gradient(90deg, red, white);
+  background-image:-o-linear-gradient(90deg, red, white);  
+}
+#mobilenavigation {
+  display:none;
+}
+#navigation {
+  background-color:green;
+  border-radius:15px;  
+}
+#navigation ul {
+  text-align:center;
+}
+#navigation li {
+  display:inline;
+  padding-left:1.5em;
+}
+#navigation li:hover {
+  background:url(https://dl.dropbox.com/u/101451130/glyphicons_065_tag.png) no-repeat left;
+}
+#navigation a:active {
+  background-color:purple;
+}
+#content {
+  background-image:-webkit-radial-gradient(grey, white);
+  background-image:-moz-radial-gradient(grey, white);
+  background-image:-o-radial-gradient(grey, white);
+}
+#content img{
+  display:block;
+  margin:auto;
+}
+.editinplace input { 
+  display:none;
+}
+.contactinfo { 
+  text-align:center;
+}
+#pushdown {
+  clear:both;
+  height:30px;
+}
+#footer {
+  background-color:orange;
+  text-align:center;
+  height:30px;
+}
+@media screen and (max-device-width:800px) {
+body{
+  width:400px;
+}
+#mobilenavigation {
+  display:block;
+}
+#navigation {
+  display:none;
+  position:absolute;
+  z-index:9999;
+  left: 10%;
+  right: 10%;
+}
+#navigation:target {
+  display:block;
+}
+#navigation li {
+  list-style-type:none;
+  padding-top:0.5em;
+  display:block;
+  padding-left:1.5em;
+}
+}
