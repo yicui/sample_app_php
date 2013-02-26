@@ -4,8 +4,16 @@ $(document).ready(function(){
     $(this).parent().children(":text").val($(this).text());
     $(this).parent().children().toggle();
   });
+  var openText;
   $(".editinplace [value='Save']").click(function() {
-    $(this).parent().children("span").text($(this).parent().children(":text:first").val());
+    openText = $(this).parent().children("span");
+    $.get("updateassignments.php", 
+      {
+        coursenumber:"CS292",
+        assignmenttitle:$(this).parent().parent().parent().prev("h3").text(), 
+        duedate:$(this).parent().children(":text").val()
+      },
+      function(data) { openText.text(data); });
     $(this).parent().children().toggle();
   });
   $(".editinplace [value='Cancel']").click(function() {
