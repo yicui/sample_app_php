@@ -7,9 +7,11 @@ $(document).ready(function(){
   var openText;
   $(".editinplace [value='Save']").click(function() {
     openText = $(this).parent().children("span");
-    $.get("updateassignments.php", 
+    var url = $(this).attr("href").split('?')[0];
+    var param = $(this).attr("href").split('?')[1];
+    $.get(url, 
       {
-        coursenumber:"CS292",
+        coursenumber:param.split('=')[1],
         assignmenttitle:$(this).parent().parent().parent().prev("h3").text(), 
         duedate:$(this).parent().children(":text").val()
       },

@@ -52,7 +52,7 @@
               echo '            <h5>Due Date' . PHP_EOL;
               echo '              <span class="editinplace">' . PHP_EOL;
               echo '                <span>' . $row['DueDate'] . '</span>' . PHP_EOL;
-              echo '                <input type="text" class="datepicker"/><input type="button" value="Save"/><input type="button" value="Cancel"/>' . PHP_EOL;
+              echo '                <input type="text" class="datepicker"/><input type="button" value="Save" href="updateassignments.php?coursenumber=' . $course_num . '"/><input type="button" value="Cancel"/>' . PHP_EOL;
               echo '              </span>' . PHP_EOL;
               echo '            </h5>' . PHP_EOL;
               echo '            <p>' . $row['Description'] . '</p>' . PHP_EOL;
