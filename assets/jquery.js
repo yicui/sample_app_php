@@ -23,7 +23,7 @@ $(document).ready(function(){
   });
   // Accordion, date picker, and tooltip
   $(".accordion").accordion();
-  $(".datepicker").datepicker();
+  $(".datepicker").datepicker({dateFormat: "yy-mm-dd"});
   $(document).tooltip();  
   // Lightbox
   var lightbox = $("<img/>").attr({src:$(".lightbox").attr("href"), title:$(".lightbox").attr("title")}).dialog({ autoOpen: false });
