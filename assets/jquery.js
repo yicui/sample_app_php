@@ -1,11 +1,11 @@
 $(document).ready(function(){
   // Edit in place
-  $(".editinplace span").click(function() {
+  function edit() {
     $(this).parent().children(":text").val($(this).text());
     $(this).parent().children().toggle();
-  });
-  var openText;
-  $(".editinplace [value='Save']").click(function() {
+  };
+  var openText;  
+  function save() {
     openText = $(this).parent().children("span");
     var url = $(this).attr("href").split('?')[0];
     var param = $(this).attr("href").split('?')[1];
@@ -17,13 +17,26 @@ $(document).ready(function(){
       },
       function(data) { openText.text(data); });
     $(this).parent().children().toggle();
-  });
-  $(".editinplace [value='Cancel']").click(function() {
+  };
+  function cancel()  {
     $(this).parent().children().toggle();
-  });
+  };
   // Accordion, date picker, and tooltip
-  $(".accordion").accordion();
-  $(".datepicker").datepicker({dateFormat: "yy-mm-dd"});
+  function initializewidgets() {
+    $(".accordion").accordion();
+    $(".accordion").find(".editinplace span").on("click", edit);
+    $(".accordion").find(".editinplace [value='Save']").on("click", save);
+    $(".accordion").find(".editinplace [value='Cancel']").on("click", cancel);
+    $(".accordion").find(".editinplace .datepicker").datepicker({dateFormat: 'yy-mm-dd'});
+  }
+  function destroywidgets() {
+    $(".accordion").accordion("destroy");
+    $(".accordion").find(".editinplace span").off("click", edit);
+    $(".accordion").find(".editinplace [value='Save']").off("click", save);
+    $(".accordion").find(".editinplace [value='Cancel']").off("click", cancel);	
+    $(".accordion").find(".editinplace .datepicker").datepicker("destroy");
+  }
+  initializewidgets();  
   $(document).tooltip();  
   // Lightbox
   var lightbox = $("<img/>").attr({src:$(".lightbox").attr("href"), title:$(".lightbox").attr("title")}).dialog({ autoOpen: false });
