@@ -42,10 +42,10 @@
       </div>
       <div id="content">
         <h2>Assignments</h2>
-        <div class="accordion">
-          <?php
-            $result = mysql_query('SELECT assignments.* from courses, assignments WHERE courses.ID=assignments.courseID AND courses.Number="' . $course_num . '" ORDER BY DueDate', $db);
-            echo PHP_EOL;
+        <?php
+          echo PHP_EOL;
+          echo '        <div class="accordion">' . PHP_EOL;
+            $result = mysql_query('SELECT assignments.* from courses, assignments WHERE courses.ID=assignments.courseID AND courses.Number="' . $course_num . '" ORDER BY DueDate LIMIT 0, 2', $db);
             while ($row = mysql_fetch_array($result)) {
               echo '          <h3>' . $row['Title'] . '</h3>' . PHP_EOL;
               echo '          <div>' . PHP_EOL;
@@ -59,8 +59,9 @@
               echo '          </div>' . PHP_EOL;
             }
             mysql_close($db);
-          ?>
-        </div>
+          echo '        </div>' . PHP_EOL;
+          echo '        <h3><a class="loadmorepaginator" href="assignmentspaginator.php?coursenumber=' . $course_num . '">More</a></h3>' . PHP_EOL;
+        ?>
       </div>
       <div id="pushdown"></div>
     </div>

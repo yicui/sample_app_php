@@ -38,6 +38,26 @@ $(document).ready(function(){
   }
   initializewidgets();  
   $(document).tooltip();  
+  // Loadmore paginator  
+  $(".loadmorepaginator").click(function() {
+    var url = $(this).attr("href").split('?')[0];
+    var param = $(this).attr("href").split('?')[1];
+    var accordioncount = $(".accordion").children("div").length;
+    $.ajax({ 
+      url:url, 
+      data:{coursenumber:param.split('=')[1], startingfrom:accordioncount, recordcount:2}, 
+      success:function(html) {
+        $(".accordion").append(html);  destroywidgets();  initializewidgets();
+        // Open the first of the newly-loaded accordion content
+        var newcount = $(".accordion").children("div").length;
+        if ((newcount - accordioncount) <= 0) return;
+        $(".accordion").accordion("option", "active", accordioncount);
+        if ((newcount - accordioncount) < 2) $(this).hide();
+        accordioncount = newcount;
+      }
+    });
+    return false;
+  });
   // Lightbox
   var lightbox = $("<img/>").attr({src:$(".lightbox").attr("href"), title:$(".lightbox").attr("title")}).dialog({ autoOpen: false });
   $(".lightbox").click(function() {
