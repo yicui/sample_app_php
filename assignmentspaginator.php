@@ -1,12 +1,13 @@
 <?php
+  require_once("model/database.php");  
+
   $options = array('options' => array('min_range' => 0), 'flags' => FILTER_FLAG_ALLOW_OCTAL);
   $startingindex = $_GET["startingfrom"]; 
   $recordcount = $_GET["recordcount"];
   $course_num = $_GET["coursenumber"];
-  filter_var($startingindex, FILTER_VALIDATE_INT, $options) or die();
-  filter_var($recordcount, FILTER_VALIDATE_INT, $options) or die();
+  filter_var($startingindex, FILTER_VALIDATE_INT, $options) or display_input_error("invalid starting index");
+  filter_var($recordcount, FILTER_VALIDATE_INT, $options) or display_input_error("invalid record count");
 
-  require_once("model/database.php");  
   $result = mysql_query("SELECT assignments.* from assignments, courses WHERE assignments.CourseID = courses.ID AND courses.Number = '" . $course_num . "' ORDER BY assignments.DueDate LIMIT " . $startingindex . ", " . $recordcount);
   echo PHP_EOL;
   while ($row = mysql_fetch_array($result)) {
