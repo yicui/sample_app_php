@@ -2,11 +2,10 @@
 <html>
   <head>
     <?php
-      global $course_num;
       global $title;
-      $db = mysql_connect("localhost", "root", "12345");
-      mysql_select_db("teaching", $db);
-      $result = mysql_query('SELECT * from courses WHERE Number="' . $course_num . '"', $db);
+      $course_num = "CS292";
+      require_once("model/database.php");
+      $result = mysql_query('SELECT * from courses WHERE Number="' . $course_num . '"');
       $row = mysql_fetch_array($result);
       echo PHP_EOL;
       echo '    <title>' . $row['Number'] . ': ' . $title . '</title>' . PHP_EOL;
@@ -26,7 +25,7 @@
     <div id="container">
       <div id="header">
         <?php
-          $result = mysql_query('SELECT * from courses, teachers WHERE teachers.ID=courses.TeacherID AND courses.Number="' . $course_num . '"', $db);
+          $result = mysql_query('SELECT * from courses, teachers WHERE teachers.ID=courses.TeacherID AND courses.Number="' . $course_num . '"');
           $row = mysql_fetch_array($result);
           echo PHP_EOL;
           echo '        <h1>' . $row['Title'] . '</h1>' . PHP_EOL;

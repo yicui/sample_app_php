@@ -5,8 +5,8 @@
   $course_num = $_GET["coursenumber"];
   filter_var($startingindex, FILTER_VALIDATE_INT, $options) or die();
   filter_var($recordcount, FILTER_VALIDATE_INT, $options) or die();
-  $db = mysql_connect("localhost", "root", "12345");
-  mysql_select_db("teaching", $db) or die();
+
+  require_once("model/database.php");  
   $result = mysql_query("SELECT assignments.* from assignments, courses WHERE assignments.CourseID = courses.ID AND courses.Number = '" . $course_num . "' ORDER BY assignments.DueDate LIMIT " . $startingindex . ", " . $recordcount);
   echo PHP_EOL;
   while ($row = mysql_fetch_array($result)) {
@@ -21,5 +21,4 @@
     echo '            <p>' . $row['Description'] . '</p>' . PHP_EOL;
     echo '          </div>' . PHP_EOL;
   }
-  mysql_close($db);
 ?>

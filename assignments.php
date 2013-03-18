@@ -1,8 +1,8 @@
 <?php
-          $course_num = 'CS292';  $title = "Assignments";
+          $title = "Assignments";
           require_once("header.php");
           echo '        <div class="accordion">' . PHP_EOL;
-            $result = mysql_query('SELECT assignments.* from courses, assignments WHERE courses.ID=assignments.courseID AND courses.Number="' . $course_num . '" ORDER BY DueDate LIMIT 0, 2', $db);
+            $result = mysql_query('SELECT assignments.* from courses, assignments WHERE courses.ID=assignments.courseID AND courses.Number="' . $course_num . '" ORDER BY DueDate LIMIT 0, 2');
             while ($row = mysql_fetch_array($result)) {
               echo '          <h3>' . $row['Title'] . '</h3>' . PHP_EOL;
               echo '          <div>' . PHP_EOL;
@@ -15,7 +15,6 @@
               echo '            <p>' . $row['Description'] . '</p>' . PHP_EOL;
               echo '          </div>' . PHP_EOL;
             }
-            mysql_close($db);
           echo '        </div>' . PHP_EOL;
           echo '        <h3><a class="loadmorepaginator" href="assignmentspaginator.php?coursenumber=' . $course_num . '">More</a></h3>' . PHP_EOL;
           include("footer.php");
