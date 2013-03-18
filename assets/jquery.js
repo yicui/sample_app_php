@@ -58,6 +58,35 @@ $(document).ready(function(){
     });
     return false;
   });
+  // Tab-based paginator
+  var tabs = $(".tabpaginator").tabs({
+    load:function() { // Slidedown effect as visual cue to the new content
+      initializewidgets();  $(".accordion").hide();  $(".accordion").slideDown();
+    },
+    active: 1, disabled: [0], // Make '1' the initial landing tab, and disable the 'Prev' tab
+    beforeActivate:function(event, ui) {
+      var numChildren = tabs.children("ul").children("li").length
+      if (ui.newTab.index() == 0) { // 'Prev' tab
+        tabs.tabs("option", "active", Math.max(ui.oldTab.index()-1, 1));
+        return false;
+      }
+      else if (ui.newTab.index() == numChildren-1) { // 'Next' tab
+        tabs.tabs("option", "active", Math.min(ui.oldTab.index()+1, numChildren-2));
+        return false;
+      }
+      // Enable/disable the 'Prev' and 'Next' tabs according to the switching of tabs
+      if (ui.newTab.index() == 1 && ui.newTab.index() == numChildren-2) {
+        tabs.tabs("disable", 0);  tabs.tabs("disable", numChildren-1); 
+      }
+      else if (ui.newTab.index() == 1) { 
+        tabs.tabs("disable", 0);  tabs.tabs("enable", numChildren-1); 
+      }
+      else if (ui.newTab.index() == numChildren-2) {
+        tabs.tabs("enable", 0);  tabs.tabs("disable", numChildren-1); 
+      }
+      $(".accordion").hide(); // jQuery Tabs automatically caches content. So we hide old tabs to avoid the flashy effect 
+    }
+  });
   // Lightbox
   var lightbox = $("<img/>").attr({src:$(".lightbox").attr("href"), title:$(".lightbox").attr("title")}).dialog({ autoOpen: false });
   $(".lightbox").click(function() {

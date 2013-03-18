@@ -42,17 +42,18 @@
       </div>
       <div id="content">
         <h2>Lecture Notes</h2>
-        <div class="accordion">
+        <div class="tabpaginator">
           <?php
-            $result = mysql_query('SELECT lecturenotes.* from courses, lecturenotes WHERE courses.ID=lecturenotes.courseID AND courses.Number="' . $course_num . '"', $db);
             echo PHP_EOL;
-            while ($row = mysql_fetch_array($result)) {
-              echo '          <h3>' . $row['Title'] . '</h3>' . PHP_EOL;
-              echo '          <div>' . PHP_EOL;
-              echo '            <p>' . $row['Content'] . '</p>' . PHP_EOL;
-              echo '          </div>' . PHP_EOL;
+            $result = mysql_query('SELECT COUNT(*) from courses, lecturenotes WHERE courses.ID=lecturenotes.courseID AND courses.Number="' . $course_num . '"', $db);
+            $count = mysql_result($result, 0);
+            $page = 1;  $startingfrom = 0;  $recordcount = 5;
+            echo '          <ul><li><a href="#">Prev</a></li>' . PHP_EOL;
+            while ($count > $startingfrom) {
+              echo '            <li><a href="lecturespaginator.php?startingfrom=' . $startingfrom . '&recordcount=' . $recordcount . '">' . $page . '</a></li>' . PHP_EOL;
+              $page ++;  $startingfrom += $recordcount;
             }
-            mysql_close($db);
+            echo '          <li><a href="#">Next</a></li></ul>' . PHP_EOL;
           ?>
         </div>
       </div>
