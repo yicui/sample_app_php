@@ -17,5 +17,5 @@
             }
           echo '        </div>' . PHP_EOL;
           echo '        <h3><a class="loadmorepaginator" href="assignmentspaginator.php?coursenumber=' . $course_num . '">More</a></h3>' . PHP_EOL;
-          include("footer.php");
+          include("view/footerView.php");
 ?>

@@ -11,5 +11,5 @@
               $page ++;  $startingfrom += $recordcount;
             }
             echo '          <li><a href="#">Next</a></li></ul>' . PHP_EOL;
-            include("footer.php");
+            include("view/footerView.php");
 ?>

@@ -7,5 +7,5 @@
           echo '          </a>' . PHP_EOL;
           echo '          <p class="contactinfo">My office is at ' . $teacher['Office'] . '</p>' . PHP_EOL;
           echo '          <img id="map" src="http://maps.googleapis.com/maps/api/staticmap?size=400x250&markers=address:' . $teacher['Office'] . '&maxZoom=17&sensor=false"/>' . PHP_EOL;
-          include("footer.php");
+          include("view/footerView.php");
 ?>
