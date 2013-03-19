@@ -1,15 +1,31 @@
 <?php
-            $title = "Lecture Notes";
-            require_once("header.php");
-            echo '        <div class="tabpaginator">' . PHP_EOL;
-            $result = mysql_query('SELECT COUNT(*) from courses, lecturenotes WHERE courses.ID=lecturenotes.courseID AND courses.Number="' . $course_num . '"');
-            $count = mysql_result($result, 0);
-            $page = 1;  $startingfrom = 0;  $recordcount = 5;
-            echo '          <ul><li><a href="#">Prev</a></li>' . PHP_EOL;
-            while ($count > $startingfrom) {
-              echo '            <li><a href="lecturespaginator.php?coursenumber=' . $course_num . '&startingfrom=' . $startingfrom . '&recordcount=' . $recordcount . '">' . $page . '</a></li>' . PHP_EOL;
-              $page ++;  $startingfrom += $recordcount;
-            }
-            echo '          <li><a href="#">Next</a></li></ul>' . PHP_EOL;
-            include("view/footerView.php");
+  require_once("model/lectureModel.php");
+  require_once("view/paginatorView.php");
+  require_once("view/accordionView.php");
+
+  function format_lectures_in_accordion($result) {
+    $accordion = array();
+    for ($i = 0; $i < count($result); $i ++) {
+      $accordion[$i]["Title"] = $result[$i]["Title"];
+      $accordioncontent = array();
+      $accordioncontent["Tag"] = "p";
+      $accordioncontent["Attributes"] = "";
+      $accordioncontent["Content"] = $result[$i]["Content"];
+      $accordion[$i]["Content"][0] = $accordioncontent;
+    }
+    return $accordion;
+  }
+
+  if (isset($_GET["coursenumber"]) && isset($_GET["startingfrom"]) && isset($_GET["recordcount"])) {
+    $result = get_lectures($_GET["coursenumber"], $_GET["startingfrom"], $_GET["recordcount"]);
+    $accordion = format_lectures_in_accordion($result);
+    display_accordion($accordion);
+  }
+  else {
+    $title = "Lecture Notes";
+    require_once("header.php");
+    $count = get_lectures_count($course_num);
+    display_tab_paginator("lectures.php?coursenumber=" . $course_num . "&", $count, 0, 5, "         ");
+    include("view/footerView.php");
+  }
 ?>
