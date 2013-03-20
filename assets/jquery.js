@@ -22,38 +22,42 @@ $(document).ready(function(){
     $(this).parent().children().toggle();
   };
   // Accordion, date picker, and tooltip
-  function initializewidgets() {
-    $(".accordion").accordion();
-    $(".accordion").find(".editinplace span").on("click", edit);
-    $(".accordion").find(".editinplace [value='Save']").on("click", save);
-    $(".accordion").find(".editinplace [value='Cancel']").on("click", cancel);
-    $(".accordion").find(".editinplace .datepicker").datepicker({dateFormat: 'yy-mm-dd'});
+  function initializewidgets(container) {
+    $(container).find(".accordion").accordion();
+    // Open the first of the newly-loaded accordion content
+    $(container).find(".accordion").accordion("option", "active", itemCount-recordCount);
+    $(container).find(".editinplace span").on("click", edit);
+    $(container).find(".editinplace [value='Save']").on("click", save);
+    $(container).find(".editinplace [value='Cancel']").on("click", cancel);
+    $(container).find(".datepicker").datepicker({dateFormat: 'yy-mm-dd'});
+    $(container).find(".grid").selectable();
   }
-  function destroywidgets() {
-    $(".accordion").accordion("destroy");
-    $(".accordion").find(".editinplace span").off("click", edit);
-    $(".accordion").find(".editinplace [value='Save']").off("click", save);
-    $(".accordion").find(".editinplace [value='Cancel']").off("click", cancel);	
-    $(".accordion").find(".editinplace .datepicker").datepicker("destroy");
+  function destroywidgets(container) {
+    $(container).find(".accordion").accordion("destroy");
+    $(container).find(".editinplace span").off("click", edit);
+    $(container).find(".editinplace [value='Save']").off("click", save);
+    $(container).find(".editinplace [value='Cancel']").off("click", cancel);
+    $(container).find(".editinplace .datepicker").datepicker("destroy");
+    $(container).find(".grid").selectable("destroy");
   }
-  initializewidgets();  
+  initializewidgets(document); 
   $(document).tooltip();  
   // Loadmore paginator  
+  const recordCount = 5;
+  var itemCount = recordCount;
   $(".loadmorepaginator").click(function() {
     var url = $(this).attr("href").split('?')[0];
     var param = $(this).attr("href").split('?')[1];
-    var accordioncount = $(".accordion").children("div").length;
+    var openElement = $(this).parent().prev();
     $.ajax({ 
       url:url, 
-      data:{coursenumber:param.split('=')[1], startingfrom:accordioncount, recordcount:2}, 
+      data:{coursenumber:param.split('=')[1], startingfrom:itemCount, recordcount:recordCount},
       success:function(html) {
-        $(".accordion").append($(html).filter(".accordion").children());  destroywidgets();  initializewidgets();
-        // Open the first of the newly-loaded accordion content
-        var newcount = $(".accordion").children("div").length;
-        if ((newcount - accordioncount) <= 0) return;
-        $(".accordion").accordion("option", "active", accordioncount);
-        if ((newcount - accordioncount) < 2) $(this).hide();
-        accordioncount = newcount;
+        if ($(html).children().length == 0) {
+          openElement.next().hide();  return;
+        }
+        itemCount += recordCount;
+        openElement.append($(html).children());  destroywidgets(openElement.parent());  initializewidgets(openElement.parent());
       }
     });
     return false;
@@ -61,7 +65,7 @@ $(document).ready(function(){
   // Tab-based paginator
   var tabs = $(".tabpaginator").tabs({
     load:function() { // Slidedown effect as visual cue to the new content
-      initializewidgets();  $(".accordion").hide();  $(".accordion").slideDown();
+      initializewidgets($(this));  $(this).children("div").children().hide();  $(this).children("div").children().slideDown();
     },
     active: 1, disabled: [0], // Make '1' the initial landing tab, and disable the 'Prev' tab
     beforeActivate:function(event, ui) {
@@ -84,7 +88,7 @@ $(document).ready(function(){
       else if (ui.newTab.index() == numChildren-2) {
         tabs.tabs("enable", 0);  tabs.tabs("disable", numChildren-1); 
       }
-      $(".accordion").hide(); // jQuery Tabs automatically caches content. So we hide old tabs to avoid the flashy effect 
+      $(this).children("div").children().hide(); // jQuery Tabs automatically caches content. So we hide old tabs to avoid the flashy effect 
     }
   });
   // Lightbox
