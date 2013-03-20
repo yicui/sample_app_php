@@ -10,4 +10,9 @@
     echo $indent . '  <li><a href="' . $url. '">Next</a></li></ul>' . PHP_EOL;
     echo $indent . '</div>' . PHP_EOL;
   }
+
+  function display_loadmore_paginator($url, $display_method, $initial_load, $indent = "") {
+    call_user_func($display_method, $initial_load, $indent);
+    echo $indent . '<h3><a class="loadmorepaginator" href="' . $url . '">More</a></h3>' . PHP_EOL;
+  }  
 ?>

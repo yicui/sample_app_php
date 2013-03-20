@@ -1,21 +1,41 @@
 <?php
-          $title = "Assignments";
-          require_once("header.php");
-          echo '        <div class="accordion">' . PHP_EOL;
-            $result = mysql_query('SELECT assignments.* from courses, assignments WHERE courses.ID=assignments.courseID AND courses.Number="' . $course_num . '" ORDER BY DueDate LIMIT 0, 2');
-            while ($row = mysql_fetch_array($result)) {
-              echo '          <h3>' . $row['Title'] . '</h3>' . PHP_EOL;
-              echo '          <div>' . PHP_EOL;
-              echo '            <h5>Due Date' . PHP_EOL;
-              echo '              <span class="editinplace">' . PHP_EOL;
-              echo '                <span>' . $row['DueDate'] . '</span>' . PHP_EOL;
-              echo '                <input type="text" class="datepicker"/><input type="button" value="Save" href="updateassignments.php?coursenumber=' . $course_num . '"/><input type="button" value="Cancel"/>' . PHP_EOL;
-              echo '              </span>' . PHP_EOL;
-              echo '            </h5>' . PHP_EOL;
-              echo '            <p>' . $row['Description'] . '</p>' . PHP_EOL;
-              echo '          </div>' . PHP_EOL;
-            }
-          echo '        </div>' . PHP_EOL;
-          echo '        <h3><a class="loadmorepaginator" href="assignmentspaginator.php?coursenumber=' . $course_num . '">More</a></h3>' . PHP_EOL;
-          include("view/footerView.php");
+  require_once("model/assignmentModel.php");
+  require_once("view/paginatorView.php");
+  require_once("view/accordionView.php");
+  
+  function format_assignments_in_accordion($result, $course_num) {
+    $accordion = array();
+    for ($i = 0; $i < count($result); $i ++) {
+      $accordion[$i]["Title"] = $result[$i]["Title"];
+      $accordioncontent = array();
+      $accordioncontent["Tag"] = "span";
+      $accordioncontent["Attributes"] = 'class="datepicker"';
+      $accordioncontent["Content"] = $result[$i]["DueDate"];
+      $accordioncontent["Editinplace"] = "assignments.php?coursenumber=" . $course_num;
+      $accordion[$i]["Content"][0] = $accordioncontent;
+      $accordioncontent = array();
+      $accordioncontent["Tag"] = "p";
+      $accordioncontent["Attributes"] = "";
+      $accordioncontent["Content"] = $result[$i]["Description"];
+      $accordion[$i]["Content"][1] = $accordioncontent;  
+    }
+    return $accordion;
+  }
+
+  if (isset($_GET["coursenumber"]) && isset($_GET["startingfrom"]) && isset($_GET["recordcount"])) {
+    $result = get_assignments($_GET["coursenumber"], $_GET["startingfrom"], $_GET["recordcount"]);
+    $accordion = format_assignments_in_accordion($result, $_GET["coursenumber"]);
+    display_accordion($accordion);  
+  }
+  else if (isset($_GET["coursenumber"]) && isset($_GET["assignmenttitle"]) && isset($_GET["duedate"])) {
+    update_assignment($_GET["coursenumber"], $_GET["assignmenttitle"], $_GET["duedate"]);
+  }
+  else {
+    $title = "Assignments";
+    require_once("header.php");
+    $result = get_assignments($course_num, 0, 2);
+    $accordion = format_assignments_in_accordion($result, $course_num);
+    display_loadmore_paginator("assignments.php?coursenumber=" . $course_num, "display_accordion", $accordion, "         ");
+    include("view/footerView.php");  
+  }
 ?>

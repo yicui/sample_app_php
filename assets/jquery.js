@@ -47,7 +47,7 @@ $(document).ready(function(){
       url:url, 
       data:{coursenumber:param.split('=')[1], startingfrom:accordioncount, recordcount:2}, 
       success:function(html) {
-        $(".accordion").append(html);  destroywidgets();  initializewidgets();
+        $(".accordion").append($(html).filter(".accordion").children());  destroywidgets();  initializewidgets();
         // Open the first of the newly-loaded accordion content
         var newcount = $(".accordion").children("div").length;
         if ((newcount - accordioncount) <= 0) return;
