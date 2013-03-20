@@ -33,9 +33,8 @@
   else {
     $title = "Assignments";
     require_once("header.php");
-    $result = get_assignments($course_num, 0, 2);
-    $accordion = format_assignments_in_accordion($result, $course_num);
-    display_loadmore_paginator("assignments.php?coursenumber=" . $course_num, "display_accordion", $accordion, "         ");
+    $count = get_assignments_count($course_num);
+    display_tab_paginator("assignments.php?coursenumber=" . $course_num . "&", $count, 0, 2, "         ");
     include("view/footerView.php");  
   }
 ?>

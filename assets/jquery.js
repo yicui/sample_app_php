@@ -12,7 +12,7 @@ $(document).ready(function(){
     $.get(url, 
       {
         coursenumber:param.split('=')[1],
-        assignmenttitle:$(this).parent().parent().parent().prev("h3").text(), 
+        assignmenttitle:$(this).parent().parent().prev("h3").text(), 
         duedate:$(this).parent().children(":text").val()
       },
       function(data) { openText.text(data); });

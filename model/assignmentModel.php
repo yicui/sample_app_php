@@ -1,7 +1,7 @@
 <?php
   require_once('database.php');
   function get_assignments_count($course_num) {
-    $result = mysql_query("SELECT assignments.* from courses, assignments WHERE assignments.CourseID = courses.ID AND courses.Number = '" . mysql_real_escape_string($course_num) . "'");
+    $result = mysql_query("SELECT COUNT(*) from courses, assignments WHERE assignments.CourseID = courses.ID AND courses.Number = '" . mysql_real_escape_string($course_num) . "'");
     return mysql_result($result, 0);
   }
 

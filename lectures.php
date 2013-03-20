@@ -24,8 +24,9 @@
   else {
     $title = "Lecture Notes";
     require_once("header.php");
-    $count = get_lectures_count($course_num);
-    display_tab_paginator("lectures.php?coursenumber=" . $course_num . "&", $count, 0, 5, "         ");
+    $result = get_lectures($course_num, 0, 5);
+    $accordion = format_lectures_in_accordion($result, $course_num);
+    display_loadmore_paginator("lectures.php?coursenumber=" . $course_num, "display_accordion", $accordion, "         ");
     include("view/footerView.php");
   }
 ?>
