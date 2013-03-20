@@ -63,6 +63,14 @@ p {
 .contactinfo { 
   text-align:center;
 }
+.grid {
+  list-style-type: none;
+}
+.grid li {
+  width:48%;
+  float:left;
+}
+
 #pushdown {
   clear:both;
   height:30px;
