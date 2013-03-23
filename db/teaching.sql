@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 24, 2013 at 10:01 PM
+-- Generation Time: Mar 23, 2013 at 09:41 PM
 -- Server version: 5.5.27
 -- PHP Version: 5.4.7
 
@@ -41,9 +41,9 @@ CREATE TABLE IF NOT EXISTS `assignments` (
 --
 
 INSERT INTO `assignments` (`ID`, `CourseID`, `Title`, `DueDate`, `Description`) VALUES
-(1, 1, 'Assignment 1', '2013-02-07', 'urna orci, volutpat nec pretium vitae, tincidunt ut arcu. In vestibulum nulla sit amet libero vulputate egestas.'),
-(2, 1, 'Assignment 2', '2013-02-28', 'Aenean nulla dolor, ornare ac eleifend vel, varius ac tortor. Quisque placerat auctor justo, eu dignissim elit sagittis vel.'),
-(3, 1, 'Assignment 3', '2013-03-14', 'Maecenas consequat rhoncus velit, nec congue arcu vehicula vel. Vestibulum vel tellus elit, et sagittis neque.'),
+(1, 1, 'Assignment 1', '2013-02-11', 'urna orci, volutpat nec pretium vitae, tincidunt ut arcu. In vestibulum nulla sit amet libero vulputate egestas.'),
+(2, 1, 'Assignment 2', '2013-02-26', 'Aenean nulla dolor, ornare ac eleifend vel, varius ac tortor. Quisque placerat auctor justo, eu dignissim elit sagittis vel.'),
+(3, 1, 'Assignment 3', '2013-02-27', 'Maecenas consequat rhoncus velit, nec congue arcu vehicula vel. Vestibulum vel tellus elit, et sagittis neque.'),
 (4, 1, 'Assignment 4', '2013-03-28', 'Ut commodo ante at sem congue condimentum. Sed sed est turpis. Sed ut tortor neque. Morbi id metus sed dui iaculis volutpat gravida blandit elit.');
 
 -- --------------------------------------------------------
@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS `lecturenotes` (
   `Content` varchar(200) NOT NULL,
   PRIMARY KEY (`ID`),
   KEY `CourseID` (`CourseID`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
 
 --
 -- Dumping data for table `lecturenotes`
@@ -109,7 +109,10 @@ CREATE TABLE IF NOT EXISTS `students` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `LastName` varchar(20) NOT NULL,
   `FirstName` varchar(20) NOT NULL,
+  `Email` varchar(100) NOT NULL,
   `YearEnrolled` year(4) NOT NULL,
+  `ThumbnailURL` varchar(500) NOT NULL,
+  `PortraitURL` varchar(500) NOT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
@@ -117,9 +120,9 @@ CREATE TABLE IF NOT EXISTS `students` (
 -- Dumping data for table `students`
 --
 
-INSERT INTO `students` (`ID`, `LastName`, `FirstName`, `YearEnrolled`) VALUES
-(1, 'Mouse', 'Mickey', 2010),
-(2, 'Duck', 'Donald', 2011);
+INSERT INTO `students` (`ID`, `LastName`, `FirstName`, `Email`, `YearEnrolled`, `ThumbnailURL`, `PortraitURL`) VALUES
+(1, 'Mouse', 'Mickey', 'mickey@anonymous.org', 2010, 'http://www.gravatar.com/avatar?s=200', 'http://www.gravatar.com/avatar?s=400'),
+(2, 'Duck', 'Donald', 'donald@anonymous.org', 2011, 'http://www.gravatar.com/avatar?s=200', 'http://www.gravatar.com/avatar?s=400');
 
 -- --------------------------------------------------------
 
@@ -140,7 +143,7 @@ CREATE TABLE IF NOT EXISTS `study` (
 INSERT INTO `study` (`StudentID`, `CourseID`) VALUES
 (1, 1),
 (1, 2),
-(2, 2);
+(2, 1);
 
 -- --------------------------------------------------------
 
@@ -176,6 +179,12 @@ INSERT INTO `teachers` (`ID`, `FirstName`, `LastName`, `Office`, `Email`, `Thumb
 --
 ALTER TABLE `courses`
   ADD CONSTRAINT `Course_ibfk_1` FOREIGN KEY (`TeacherID`) REFERENCES `teachers` (`ID`);
+
+--
+-- Constraints for table `lecturenotes`
+--
+ALTER TABLE `lecturenotes`
+  ADD CONSTRAINT `lecturenotes_ibfk_1` FOREIGN KEY (`CourseID`) REFERENCES `courses` (`ID`) ON DELETE NO ACTION;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
