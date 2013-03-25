@@ -30,7 +30,6 @@ $(document).ready(function(){
     $(container).find(".editinplace [value='Save']").on("click", save);
     $(container).find(".editinplace [value='Cancel']").on("click", cancel);
     $(container).find(".datepicker").datepicker({dateFormat: 'yy-mm-dd'});
-    $(container).find(".grid").selectable();
   }
   function destroywidgets(container) {
     $(container).find(".accordion").accordion("destroy");
@@ -38,7 +37,6 @@ $(document).ready(function(){
     $(container).find(".editinplace [value='Save']").off("click", save);
     $(container).find(".editinplace [value='Cancel']").off("click", cancel);
     $(container).find(".editinplace .datepicker").datepicker("destroy");
-    $(container).find(".grid").selectable("destroy");
   }
   initializewidgets(document); 
   $(document).tooltip();  
@@ -91,10 +89,18 @@ $(document).ready(function(){
       $(this).children("div").children().hide(); // jQuery Tabs automatically caches content. So we hide old tabs to avoid the flashy effect 
     }
   });
+  // Dialog for formView
+  $(".dialog").click(function() {
+    var openElement = $("<div></div>").load($(this).attr("href")).dialog({modal:true, width:"auto", title:$(this).text()});
+    return false;
+  });
   // Lightbox
-  var lightbox = $("<img/>").attr({src:$(".lightbox").attr("href"), title:$(".lightbox").attr("title")}).dialog({ autoOpen: false });
+  var lightboxes = {};
+  $(".lightbox").each(function() {
+    lightboxes[$(this).attr("href")] = $("<img/>").attr({src:$(this).attr("href"), title:$(this).attr("title")}).dialog({ autoOpen: false });
+  });
   $(".lightbox").click(function() {
-    lightbox.dialog("open");    
+    lightboxes[$(this).attr("href")].dialog("open");    
     return false;  
   });
   // Google Map  

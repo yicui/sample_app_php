@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 23, 2013 at 09:41 PM
+-- Generation Time: Mar 25, 2013 at 06:28 AM
 -- Server version: 5.5.27
 -- PHP Version: 5.4.7
 
@@ -114,15 +114,15 @@ CREATE TABLE IF NOT EXISTS `students` (
   `ThumbnailURL` varchar(500) NOT NULL,
   `PortraitURL` varchar(500) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21 ;
 
 --
 -- Dumping data for table `students`
 --
 
 INSERT INTO `students` (`ID`, `LastName`, `FirstName`, `Email`, `YearEnrolled`, `ThumbnailURL`, `PortraitURL`) VALUES
-(1, 'Mouse', 'Mickey', 'mickey@anonymous.org', 2010, 'http://www.gravatar.com/avatar?s=200', 'http://www.gravatar.com/avatar?s=400'),
-(2, 'Duck', 'Donald', 'donald@anonymous.org', 2011, 'http://www.gravatar.com/avatar?s=200', 'http://www.gravatar.com/avatar?s=400');
+(1, 'Mouse', 'Mickey', 'mickey@anonymous.org', 2010, 'thumbnails/student1.jpg', 'images/student1.jpg'),
+(2, 'Duck', 'Donald', 'donald@anonymous.org', 2011, 'thumbnails/student2.jpg', 'images/student2.gif');
 
 -- --------------------------------------------------------
 
