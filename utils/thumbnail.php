@@ -15,7 +15,7 @@
       $bgc = imagecolorallocate($im, 255, 255, 255);
       $tc  = imagecolorallocate($im, 0, 0, 0);
 
-      magefilledrectangle($im, 0, 0, 300, 400, $bgc);
+      imagefilledrectangle($im, 0, 0, 300, 400, $bgc);
 
       imagestring($im, 4, 50, 150, 'Thumbnail Not Available', $tc);
       imagejpeg($im, $thumbnailURL);
@@ -35,9 +35,9 @@
         imagejpeg($newimg, $thumbnailURL) or die("Failed to create thumbnail");
       }
       else { // picture too tall
-      $newimg = imagecreatetruecolor ($resize_width, $resize_height);
-      imagecopyresampled ($newimg, $im, 0, 0, 0, 0, $resize_width, $resize_height, $width, (($width) / $resize_ratio));
-      imagejpeg($newimg, $thumbnailURL) or die("Failed to create thumbnail");
+        $newimg = imagecreatetruecolor ($resize_width, $resize_height);
+        imagecopyresampled ($newimg, $im, 0, 0, 0, 0, $resize_width, $resize_height, $width, (($width) / $resize_ratio));
+        imagejpeg($newimg, $thumbnailURL) or die("Failed to create thumbnail");
     } 
     else { // not crop, which results in a smaller thumbnail
       if ($ratio >= $resize_ratio) {
