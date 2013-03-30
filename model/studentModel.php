@@ -18,7 +18,7 @@
     return $records;
   }
 
-  function add_student($course_num, $lastname, $firstname, $email, $yearenrolled) {
+  function register_student($lastname, $firstname, $email, $password, $yearenrolled) {
     $email = strtoupper($email);
     preg_match("/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/", $email) or display_input_error("Email is invalid");        
     preg_match("/^[0-9]{4}$/", $yearenrolled) or display_input_error("Enrolled year is invalid");
@@ -30,10 +30,8 @@
     mysql_query("INSERT INTO students (LastName, FirstName, Email, YearEnrolled) VALUES ('" . $lastname . "','" . $firstname . "','" . $email . "','" . $yearenrolled . "')");
     $result = mysql_query("SELECT students.ID from students WHERE students.Email = '". $email . "'");
     $studentID = mysql_result($result, 0);
-    $result = mysql_query("SELECT courses.ID from courses WHERE courses.Number = '" . mysql_real_escape_string($course_num) . "'");
-    $courseID = mysql_result($result, 0);
 
-    mysql_query("INSERT INTO study (StudentID, CourseID) VALUES ('" . $studentID . "','" . $courseID . "')");
+    mysql_query("UPDATE students SET Password = '" . sha1($email . mysql_real_escape_string($password)) . "' WHERE ID = " . $studentID);
     return $studentID;
   }
 
@@ -51,5 +49,34 @@
     $statement = "UPDATE students SET students.ThumbnailURL = '" . mysql_real_escape_string($thumbnailURL) . "', students.PortraitURL = '" . mysql_real_escape_string($portraitURL) . "' WHERE students.ID = '" . $studentID . "'";
     mysql_query($statement);
     if (mysql_affected_rows() == 0) display_db_error("Student ID " . $studentID . " does not exist");
-  }  
+  }
+  
+  function add_student($course_num, $email) {
+    $email = strtoupper($email);
+    if (!preg_match("/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/", $email)) 
+      display_input_error("Student email is invalid");
+
+    $result = mysql_query("SELECT ID from students WHERE Email = '". $email . "'");
+    if (mysql_num_rows($result) == 0) return "Nonexisting student account " . $email;
+    $studentID = mysql_result($result, 0);
+
+    $result = mysql_query("SELECT courses.ID from courses WHERE courses.Number = '" . mysql_real_escape_string($course_num) . "'");
+    $courseID = mysql_result($result, 0);
+
+    mysql_query("INSERT INTO study (StudentID, CourseID) VALUES ('" . $studentID . "','" . $courseID . "')");
+    return $studentID;
+  }
+
+  function is_student_valid($email, $password) {
+    $email = strtoupper($email);
+    if (!preg_match("/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/", $email))
+      display_input_error("Student email is invalid");
+
+    $result = mysql_query("SELECT * from students WHERE Email = '". $email . "'");
+    if (mysql_num_rows($result) == 0) return "Nonexisting student account " . $email;
+
+    $row = mysql_fetch_array($result);
+    if (sha1($email . mysql_real_escape_string($password)) != $row['Password']) return "Wrong Password";
+    return "Welcome " . $row['FirstName'] . "!";
+  }
 ?>

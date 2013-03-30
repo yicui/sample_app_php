@@ -28,18 +28,9 @@
 
   function format_add_students() {
     $input = array();
-    $input[0]["prompt"] = "First Name: ";
-    $input[0]["name"] = "firstname";
-    $input[0]["type"] = "text";          
-    $input[1]["prompt"] = "Last Name: ";
-    $input[1]["name"] = "lastname";
-    $input[1]["type"] = "text";
-    $input[2]["prompt"] = "Email: ";
-    $input[2]["name"] = "email";
-    $input[2]["type"] = "text";
-    $input[3]["prompt"] = "Upload Picture: ";
-    $input[3]["name"] = "portrait";
-    $input[3]["type"] = "file";
+    $input[0]["prompt"] = "Email: ";
+    $input[0]["name"] = "email";
+    $input[0]["type"] = "text";
     return $input;
   }
 
@@ -52,19 +43,18 @@
     $form = format_add_students();
     display_form($form, "students.php", "post", "");
   }
-  else if (isset($_POST["lastname"]) && isset($_POST["firstname"]) && isset($_POST["email"]) && isset($_FILES["portrait"])) {
+  else if (isset($_POST["email"])) {
     $title = "Students";
     require_once("header.php");
-    $studentID = add_student($course_num, $_POST["lastname"], $_POST["firstname"], $_POST["email"], date("Y"));
-    update_student_picture($studentID, $_FILES["portrait"]);
-    display_element('p', 'Successfully added ' . $_POST["firstname"] . ' ' . $_POST["lastname"], '', '         ');
+    $studentID = add_student($course_num, $_POST["email"]);
+    display_element('p', 'Successfully added ' . $_POST["email"], '', '         ');
     display_element('a', 'View Students', 'href="students.php"', '         ');
     include("view/footerView.php");
   }
   else {
     $title = "Students";
     require_once("header.php");
-    $result = get_students($course_num, 0, 2);
+    $result = get_students($course_num, 0, 5);
     $grid = format_students_in_grid($result, $course_num);
     display_loadmore_paginator("students.php?coursenumber=" . $course_num, "display_grid", $grid, "         ");
     display_element('a', 'Add a student', 'href="students.php?add=true" class="dialog"', '         ');

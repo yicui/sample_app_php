@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 25, 2013 at 06:28 AM
+-- Generation Time: Mar 30, 2013 at 08:09 PM
 -- Server version: 5.5.27
 -- PHP Version: 5.4.7
 
@@ -113,16 +113,17 @@ CREATE TABLE IF NOT EXISTS `students` (
   `YearEnrolled` year(4) NOT NULL,
   `ThumbnailURL` varchar(500) NOT NULL,
   `PortraitURL` varchar(500) NOT NULL,
+  `Password` varchar(40) NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `students`
 --
 
-INSERT INTO `students` (`ID`, `LastName`, `FirstName`, `Email`, `YearEnrolled`, `ThumbnailURL`, `PortraitURL`) VALUES
-(1, 'Mouse', 'Mickey', 'mickey@anonymous.org', 2010, 'thumbnails/student1.jpg', 'images/student1.jpg'),
-(2, 'Duck', 'Donald', 'donald@anonymous.org', 2011, 'thumbnails/student2.jpg', 'images/student2.gif');
+INSERT INTO `students` (`ID`, `LastName`, `FirstName`, `Email`, `YearEnrolled`, `ThumbnailURL`, `PortraitURL`, `Password`) VALUES
+(1, 'Mouse', 'Mickey', 'MICKEY@ANONYMOUS.ORG', 2010, 'thumbnails/student1.jpg', 'images/student1.jpg', '0d538a366b3a3226d2e8996b62d4049f1faa7bb2'),
+(2, 'Duck', 'Donald', 'DONALD@ANONYMOUS.ORG', 2011, 'thumbnails/student2.jpg', 'images/student2.gif', 'a269123cc5ad26812ccfe74aaafc5bcf5fbf9a0c');
 
 -- --------------------------------------------------------
 

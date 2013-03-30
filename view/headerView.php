@@ -23,6 +23,7 @@
         echo '      <div id="header">' . PHP_EOL;
         echo '        <h1>' . $course['Title'] . '</h1>' . PHP_EOL;
         echo '        <h3 title="Email: ' . $teacher['Email'] . '">Lecturer: ' . $teacher['FirstName'] . ' ' . $teacher['LastName'] . '</h3>' . PHP_EOL;
+        echo '        <h3><a href="login.php?action=login" class="dialog">Login</a> <a href="login.php?action=register" class="dialog">Register</a></h3>' . PHP_EOL;
         echo '        <h3 id="mobilenavigation"><a href="#navigation">Navigate</a></h3>' . PHP_EOL;
         echo '      </div>' . PHP_EOL;
       }
