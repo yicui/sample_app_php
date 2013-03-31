@@ -46,9 +46,18 @@
   else if (isset($_POST["lastname"]) && isset($_POST["firstname"]) && isset($_POST["email"]) && isset($_POST["password1"]) && isset($_POST["password2"]) && isset($_FILES["portrait"])) {
     if ($_POST["password1"] != $_POST["password2"])
       display_input_error("Retyped password doesn't match");
-    $studentID = register_student($_POST["lastname"], $_POST["firstname"], $_POST["email"], $_POST["password1"], date("Y"));
-    update_student_picture($studentID, $_FILES["portrait"]);
-    $title = "Registration Completed";
+    $record = register_student($_POST["lastname"], $_POST["firstname"], $_POST["email"], $_POST["password1"], date("Y"));
+    update_student_picture($record["ID"], $_FILES["portrait"]);
+    $message = 'http://' . $_SERVER['HTTP_HOST'] . "/login.php?activationkey=" . $record["ActivationKey"] . "&email=" . $_POST["email"];
+    mail($_POST["email"], "Activate your account", $message);
+    $title = "Registration Completed. An activation email has been sent to " . $_POST["email"];
+    require_once("header.php");
+    include("view/footerView.php");
+  }
+  // process activation
+  else if (isset($_GET["activationkey"]) && isset($_GET["email"])) {
+    $response = activate_student($_GET["email"], $_GET["activationkey"]);
+    $title = $response;
     require_once("header.php");
     include("view/footerView.php");
   }

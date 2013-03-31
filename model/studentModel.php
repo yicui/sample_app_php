@@ -11,7 +11,7 @@
     filter_var($recordcount, FILTER_VALIDATE_INT, $options) or  display_input_error("invalid record count");
     if (!filter_var($startingindex, FILTER_VALIDATE_INT, $options) && $startingindex != 0) display_input_error("invalid starting index");
 
-    $result = mysql_query("SELECT students.* from students, courses, study WHERE study.StudentID = students.ID AND study.CourseID = courses.ID AND courses.Number = '" . mysql_real_escape_string($course_num) . "' ORDER BY students.LastName LIMIT " . $startingindex . ", " . $recordcount);
+    $result = mysql_query("SELECT * from students, courses, study WHERE study.StudentID = students.ID AND study.CourseID = courses.ID AND courses.Number = '" . mysql_real_escape_string($course_num) . "' ORDER BY students.LastName LIMIT " . $startingindex . ", " . $recordcount);
     $records = array();
     while ($row = mysql_fetch_array($result))
        $records[] = $row;
@@ -27,12 +27,28 @@
     $result = mysql_query("SELECT COUNT(*) from students WHERE students.Email = '". $email . "'");
     if (mysql_result($result, 0) > 0) display_input_error("Student account " . $email . " already exists!");
 
-    mysql_query("INSERT INTO students (LastName, FirstName, Email, YearEnrolled) VALUES ('" . $lastname . "','" . $firstname . "','" . $email . "','" . $yearenrolled . "')");
-    $result = mysql_query("SELECT students.ID from students WHERE students.Email = '". $email . "'");
-    $studentID = mysql_result($result, 0);
+    $activationkey = sha1(mt_rand(10000,99999) . time() . $email);
+    mysql_query("INSERT INTO students (LastName, FirstName, Email, YearEnrolled, Password, ActivationKey, Verified) VALUES ('" . $lastname . "','" . $firstname . "','" . $email . "','" . $yearenrolled . "','" . sha1($email . $password) . "','" . $activationkey . "',FALSE)");
 
-    mysql_query("UPDATE students SET Password = '" . sha1($email . mysql_real_escape_string($password)) . "' WHERE ID = " . $studentID);
-    return $studentID;
+    $result = mysql_query("SELECT * from students WHERE students.Email = '". $email . "'");
+    $row = mysql_fetch_array($result);
+    return $row;
+  }
+
+  function activate_student($email, $activationkey) {
+    $email = strtoupper($email);
+    preg_match("/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/", $email) or display_input_error("Email is invalid");
+    if (strlen(mysql_real_escape_string($activationkey)) != 40) display_input_error("Invalid activation key");
+      
+    $result = mysql_query("SELECT students.* from students WHERE Email = '". $email . "'");
+    if (mysql_num_rows($result) == 0) return "Nonexisting student account " . $email;
+
+    $row = mysql_fetch_array($result);
+    $studentID = $row['ID'];
+    if (mysql_real_escape_string($activationkey) != $row['ActivationKey']) return "The activation key doesn't match the one assigned to the student account " . $email;
+
+    mysql_query("UPDATE students SET Verified = TRUE WHERE ID = " . $studentID);
+    return "Congratulations! student account " . $email . " has been activated";
   }
 
   function update_student_picture($studentID, $file) {
