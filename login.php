@@ -38,6 +38,11 @@
   // process login
   if (isset($_POST["email"]) && isset($_POST["password"])) {
     $response = is_student_valid($_POST["email"], $_POST["password"]);
+    if (strstr($response, "Nonexisting student account") == true) {
+      $response = is_teacher_valid($_POST["email"], $_POST["password"]);
+      if (strstr($response, "Nonexisting teacher account") == true)
+        $response = "Nonexisting account";
+    }
     $title = $response;
     require_once("header.php");
     include("view/footerView.php");

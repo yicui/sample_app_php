@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 31, 2013 at 05:24 AM
+-- Generation Time: Mar 31, 2013 at 04:03 PM
 -- Server version: 5.5.27
 -- PHP Version: 5.4.7
 
@@ -162,6 +162,7 @@ CREATE TABLE IF NOT EXISTS `teachers` (
   `Email` varchar(100) NOT NULL,
   `ThumbnailURL` varchar(500) DEFAULT NULL,
   `PortraitURL` varchar(500) NOT NULL,
+  `Password` varchar(40) NOT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
@@ -169,9 +170,9 @@ CREATE TABLE IF NOT EXISTS `teachers` (
 -- Dumping data for table `teachers`
 --
 
-INSERT INTO `teachers` (`ID`, `FirstName`, `LastName`, `Office`, `Email`, `ThumbnailURL`, `PortraitURL`) VALUES
-(1, 'Yi', 'Cui', 'FGH 379, 400 24th Ave S, Nashville, TN 37212', 'yicui2004@gmail.com', 'https://secure.gravatar.com/avatar/d0907d511f4560ebea7eee262068226b?s=200', 'https://secure.gravatar.com/avatar/d0907d511f4560ebea7eee262068226b?s=400'),
-(2, 'Mr', 'Anonymous', 'Magic Kingdom, Orlando, FL', 'anonymous@anonymous.org', 'http://www.gravatar.com/avatar?s=200', 'http://www.gravatar.com/avatar?s=400');
+INSERT INTO `teachers` (`ID`, `FirstName`, `LastName`, `Office`, `Email`, `ThumbnailURL`, `PortraitURL`, `Password`) VALUES
+(1, 'Yi', 'Cui', 'FGH 379, 400 24th Ave S, Nashville, TN 37212', 'yicui2004@gmail.com', 'https://secure.gravatar.com/avatar/d0907d511f4560ebea7eee262068226b?s=200', 'https://secure.gravatar.com/avatar/d0907d511f4560ebea7eee262068226b?s=400', '59b95054cc5f395d27dc32407b1f9e6c2eee8828'),
+(2, 'Mr', 'Anonymous', 'Magic Kingdom, Orlando, FL', 'anonymous@anonymous.org', 'http://www.gravatar.com/avatar?s=200', 'http://www.gravatar.com/avatar?s=400', '3371971f750b1effe1596cfb2f57d16ae64f1da1');
 
 --
 -- Constraints for dumped tables
