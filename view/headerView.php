@@ -23,7 +23,9 @@
         echo '      <div id="header">' . PHP_EOL;
         echo '        <h1>' . $course['Title'] . '</h1>' . PHP_EOL;
         echo '        <h3 title="Email: ' . $teacher['Email'] . '">Lecturer: ' . $teacher['FirstName'] . ' ' . $teacher['LastName'] . '</h3>' . PHP_EOL;
+        if ($_SESSION["role"] == "visitor")
         echo '        <h3><a href="login.php?action=login" class="dialog">Login</a> <a href="login.php?action=register" class="dialog">Register</a></h3>' . PHP_EOL;
+        else echo '        <h3><a href="login.php?action=logout">Logout</a>' . PHP_EOL;
         echo '        <h3 id="mobilenavigation"><a href="#navigation">Navigate</a></h3>' . PHP_EOL;
         echo '      </div>' . PHP_EOL;
       }
@@ -31,8 +33,11 @@
         echo '      <div id="navigation">' . PHP_EOL;
         echo '        <ul>' . PHP_EOL;
         echo '          <li><a href="syllabus.php">Syllabus</a></li>' . PHP_EOL;
+        if ($_SESSION["role"] != "visitor") {
         echo '          <li><a href="lectures.php">Lecture Notes</a></li>' . PHP_EOL;
         echo '          <li><a href="assignments.php">Assignments</a></li>' . PHP_EOL;
+        }
+        if ($_SESSION["role"] == "teacher")
         echo '          <li><a href="students.php">Students</a></li>' . PHP_EOL;
         echo '        </ul>' . PHP_EOL;
         echo '      </div>' . PHP_EOL;

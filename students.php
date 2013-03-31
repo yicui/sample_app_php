@@ -34,6 +34,14 @@
     return $input;
   }
 
+  session_start();
+  if (!isset($_SESSION["role"]))
+    $_SESSION["role"] = "visitor";
+  if ($_SESSION["role"] != "teacher") {
+    display_route_error("You must be a teacher to view this page");
+    return;
+  }
+
   if (isset($_GET["coursenumber"]) && isset($_GET["startingfrom"]) && isset($_GET["recordcount"])) {
     $result = get_students($_GET["coursenumber"], $_GET["startingfrom"], $_GET["recordcount"]);
     $grid = format_students_in_grid($result);

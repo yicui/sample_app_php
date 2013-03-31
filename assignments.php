@@ -9,9 +9,12 @@
       $accordion[$i]["Title"] = $result[$i]["Title"];
       $accordioncontent = array();
       $accordioncontent["Tag"] = "span";
-      $accordioncontent["Attributes"] = 'class="datepicker"';
       $accordioncontent["Content"] = $result[$i]["DueDate"];
-      $accordioncontent["Editinplace"] = "assignments.php?coursenumber=" . $course_num;
+      if ($_SESSION["role"] == "teacher") {
+        $accordioncontent["Attributes"] = 'class="datepicker"';
+        $accordioncontent["Editinplace"] = "assignments.php?coursenumber=" . $course_num;
+      }
+      else $accordioncontent["Attributes"] = "";
       $accordion[$i]["Content"][0] = $accordioncontent;
       $accordioncontent = array();
       $accordioncontent["Tag"] = "p";
@@ -20,6 +23,14 @@
       $accordion[$i]["Content"][1] = $accordioncontent;  
     }
     return $accordion;
+  }
+  session_start();
+  if (!isset($_SESSION["role"]))
+    $_SESSION["role"] = "visitor";
+
+  if ($_SESSION["role"] == "visitor") {
+    display_route_error("You must be a teacher or student to view this page");
+    return;
   }
 
   if (isset($_GET["coursenumber"]) && isset($_GET["startingfrom"]) && isset($_GET["recordcount"])) {

@@ -35,14 +35,25 @@
     $input[5]["type"] = "file";
     return $input;
   }
+
+  session_start();
+  if (!isset($_SESSION["role"]))
+    $_SESSION["role"] = "visitor";
+
   // process login
   if (isset($_POST["email"]) && isset($_POST["password"])) {
+    if ($_SESSION["role"] != "visitor")
+      display_route_error("You must first logout, then login again");  
     $response = is_student_valid($_POST["email"], $_POST["password"]);
     if (strstr($response, "Nonexisting student account") == true) {
       $response = is_teacher_valid($_POST["email"], $_POST["password"]);
       if (strstr($response, "Nonexisting teacher account") == true)
         $response = "Nonexisting account";
+      else $_SESSION["role"] = "teacher";
     }
+    else $_SESSION["role"] = "student";
+    if (strstr($response, "Wrong Password") == true)
+      $_SESSION["role"] = "visitor";
     $title = $response;
     require_once("header.php");
     include("view/footerView.php");
@@ -62,13 +73,25 @@
   // process activation
   else if (isset($_GET["activationkey"]) && isset($_GET["email"])) {
     $response = activate_student($_GET["email"], $_GET["activationkey"]);
+    // Whether success or failure, the role should be changed to visitor to allow the user to login or register
+    $_SESSION["role"] = "visitor";
     $title = $response;
     require_once("header.php");
     include("view/footerView.php");
   }
   else if (isset($_GET["action"])) {
-    if ($_GET["action"] == "login")
+    if ($_GET["action"] == "logout") {
+      $_SESSION["role"] = "visitor";
+      $title = "You're now logged out";
+      require_once("header.php");
+      include("view/footerView.php");
+      return;
+    }
+    if ($_GET["action"] == "login") {
+      if ($_SESSION["role"] != "visitor")
+        display_route_error("You must first logout, then login again");
       $form = format_login();
+    }
     else if ($_GET["action"] == "register")
       $form = format_registration();
     display_form($form, "login.php", "post", "");

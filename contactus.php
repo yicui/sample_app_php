@@ -1,4 +1,8 @@
 <?php
+  session_start();
+  if (!isset($_SESSION["role"]))
+    $_SESSION["role"] = "visitor";
+
   $title = "Contact Us";
   require_once("header.php");
   require_once("view/personView.php");  

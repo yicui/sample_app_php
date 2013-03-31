@@ -20,4 +20,11 @@
     echo '</div>' . PHP_EOL;
     die();
   }  
+  function display_route_error($error_message) {
+    echo '<div>' . PHP_EOL;
+    echo '  <h1>Routing Error</h1>' . PHP_EOL;
+    echo '  <p>Error message: ' . $error_message . '</p>' . PHP_EOL;
+    echo '</div>' . PHP_EOL;
+    die();
+  }  
 ?>
