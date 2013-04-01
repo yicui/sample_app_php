@@ -60,7 +60,8 @@
     else $_SESSION["role"] = "student";
     if (strstr($response, "Wrong Password") == true)
       $_SESSION["role"] = "visitor";
-    $title = $response;
+    else $_SESSION["username"] = $_POST["email"];
+    $_SESSION["title"] = $response;
     require_once("header.php");
     include("view/footerView.php");
   }
@@ -72,7 +73,7 @@
     update_student_picture($record["ID"], $_FILES["portrait"]);
     $message = 'http://' . $_SERVER['HTTP_HOST'] . "/login.php?activationkey=" . $record["ActivationKey"] . "&email=" . $_POST["email"];
     mail($_POST["email"], "Activate your account", $message);
-    $title = "Registration Completed. An activation email has been sent to " . $_POST["email"];
+    $_SESSION["title"] = "Registration Completed. An activation email has been sent to " . $_POST["email"];
     require_once("header.php");
     include("view/footerView.php");
   }
@@ -81,14 +82,15 @@
     $response = activate_student($_GET["email"], $_GET["activationkey"]);
     // Whether success or failure, the role should be changed to visitor to allow the user to login or register
     $_SESSION["role"] = "visitor";
-    $title = $response;
+    $_SESSION["title"] = $response;
     require_once("header.php");
     include("view/footerView.php");
   }
   else if (isset($_GET["action"])) {
     if ($_GET["action"] == "logout") {
       $_SESSION["role"] = "visitor";
-      $title = "You're now logged out";
+      $_SESSION["title"] = "You're now logged out";
+      unset($_SESSION["course_num"]);
       require_once("header.php");
       include("view/footerView.php");
       return;

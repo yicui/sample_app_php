@@ -25,9 +25,12 @@
     return $accordion;
   }
   session_start();
+  if (!isset($_SESSION["course_num"])) {
+    display_route_error("You haven't selected a course yet. Login first if you haven't done so.");
+    return;
+  }
   if (!isset($_SESSION["role"]))
     $_SESSION["role"] = "visitor";
-
   if ($_SESSION["role"] == "visitor") {
     display_route_error("You must be a teacher or student to view this page");
     return;
@@ -42,10 +45,10 @@
     update_assignment($_GET["coursenumber"], $_GET["assignmenttitle"], $_GET["duedate"]);
   }
   else {
-    $title = "Assignments";
+    $_SESSION["title"] = "Assignments";
     require_once("header.php");
-    $count = get_assignments_count($course_num);
-    display_tab_paginator("assignments.php?coursenumber=" . $course_num . "&", $count, 0, 2, "         ");
+    $count = get_assignments_count($_SESSION["course_num"]);
+    display_tab_paginator("assignments.php?coursenumber=" . $_SESSION["course_num"] . "&", $count, 0, 2, "         ");
     include("view/footerView.php");  
   }
 ?>

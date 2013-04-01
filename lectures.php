@@ -35,6 +35,10 @@
   }
 
   session_start();
+  if (!isset($_SESSION["course_num"])) {
+    display_route_error("You haven't selected a course yet. Login first if you haven't done so.");
+    return;
+  }
   if (!isset($_SESSION["role"]))
     $_SESSION["role"] = "visitor";
   if ($_SESSION["role"] == "visitor") {
@@ -48,11 +52,11 @@
     display_grid($grid);
   }
   else {
-    $title = "Lecture Notes";
+    $_SESSION["title"] = "Lecture Notes";
     require_once("header.php");
-    $result = get_lectures($course_num, 0, 5);
-    $grid = format_lectures_in_grid($result, $course_num);
-    display_loadmore_paginator("lectures.php?coursenumber=" . $course_num, "display_grid", $grid, "         ");
+    $result = get_lectures($_SESSION["course_num"], 0, 5);
+    $grid = format_lectures_in_grid($result, $_SESSION["course_num"]);
+    display_loadmore_paginator("lectures.php?coursenumber=" . $_SESSION["course_num"], "display_grid", $grid, "         ");
     include("view/footerView.php");
   }
 ?>

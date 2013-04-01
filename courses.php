@@ -2,6 +2,7 @@
   require_once("model/courseModel.php");
   require_once("model/teacherModel.php");
   require_once("view/accordionView.php");
+  require_once("view/gridView.php");  
   require_once("view/formView.php");
 
   function format_courses_in_accordion($result) {
@@ -21,6 +22,19 @@
     }
     return $accordion;
   }
+
+  function format_courses_in_grid($result) {
+    $grid = array();
+    for ($i = 0; $i < count($result); $i ++) {
+      $griditem = array();
+      $griditem["Tag"] = 'a';
+      $griditem["Attributes"] = 'href="courses.php?action=selectcourse&coursenumber=' . $result[$i]["Number"] . '"';
+      $griditem["Content"] = $result[$i]["Number"] . ': ' . $result[$i]["Title"];
+      $grid[$i][0] = $griditem;
+    }
+    return $grid;
+  }
+
   function format_update_teacher($course_num) {
     $input = array();
     $input[0]["prompt"] = "Course: ";
@@ -36,26 +50,45 @@
   session_start();
   if (!isset($_SESSION["role"]))
     $_SESSION["role"] = "visitor";
-  if ($_SESSION["role"] != "admin") {
-    display_route_error("You must be an admin to view this page");
-    return;
-  }
 
-  if (isset($_GET["action"])) {
+  if ($_SESSION["role"] == "visitor") {
+    $_SESSION["title"] = "";  
+    require_once("header.php");
+    include("view/footerView.php");
+  }
+  else if (isset($_GET["action"])) {
+    if ($_GET["action"] = "selectcourse") {
+      $_SESSION["course_num"] = $_GET["coursenumber"];
+      $_SESSION["title"] = $_SESSION["course_num"] . " is selected";
+      require_once("header.php");
+      include("view/footerView.php");
+      return;
+    }
     if ($_GET["action"] = "updateteacher")
       $form = format_update_teacher($_GET["coursenumber"]);
     display_form($form, "courses.php", "get", "");
   }
   else if (isset($_GET["coursenumber"]) && isset($_GET["teacheremail"])) {
     update_course($_GET["coursenumber"], $_GET["teacheremail"]);
-    $title = "Courses";
+    $_SESSION["title"] = "Successfully changed the teacher of " . $_GET["coursenumber"] . " to " . $_GET["teacheremail"];
     require_once("header.php");
-    display_element('p', 'Successfully changed the teacher of ' . $_GET["coursenumber"] . ' to ' . $_GET["teacheremail"], '', '          ');
     display_element('a', 'View Courses', 'href="courses.php"', '          ');
     include("view/footerView.php");
   }
   else {
-    $title = "Courses";
+    if ($_SESSION["role"] != "admin") {
+      $_SESSION["title"] = "Select a Course";
+      require_once("header.php");
+      if ($_SESSION["role"] == "student")
+        $result = get_courses_by_student($_SESSION["username"]);
+      else
+        $result = get_courses_by_teacher($_SESSION["username"]);
+      $grid = format_courses_in_grid($result);
+      display_grid($grid);
+      include("view/footerView.php");
+      return;
+    }
+    $_SESSION["title"] = "Courses";
     require_once("header.php");
     $result = get_courses();
     for ($i = 0; $i < count($result); $i ++) {
@@ -63,7 +96,7 @@
       if ($teacher == false) $result[$i]["TeacherEmail"] = "No teacher assigned";
       $result[$i]["TeacherEmail"] = $teacher["Email"];
     }
-    $accordion = format_courses_in_accordion($result, $course_num);
+    $accordion = format_courses_in_accordion($result);
     display_accordion($accordion);
     include("view/footerView.php");
   }
