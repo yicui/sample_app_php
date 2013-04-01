@@ -38,16 +38,14 @@
       }
       function display_navigation($role, $course) {
         echo '      <div id="navigation">' . PHP_EOL;
-        if ($role == "visitor") {
-          echo '      </div>' . PHP_EOL;
-          return;
-        }
         echo '        <ul>' . PHP_EOL;
         echo '          <li><a href="courses.php">Course Selection</a></li>' . PHP_EOL;
         if ($course != null) {
           echo '          <li><a href="syllabus.php">Syllabus</a></li>' . PHP_EOL;
+          if ($role != "visitor") {
           echo '          <li><a href="lectures.php">Lecture Notes</a></li>' . PHP_EOL;
           echo '          <li><a href="assignments.php">Assignments</a></li>' . PHP_EOL;
+          }
           if ($role == "teacher" || $role == "admin")
             echo '          <li><a href="students.php">Students</a></li>' . PHP_EOL;
         }

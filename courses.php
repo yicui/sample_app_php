@@ -19,6 +19,11 @@
       $accordioncontent["Attributes"] = 'class="dialog" href="courses.php?action=updateteacher&coursenumber=' . $result[$i]["Number"] . '"';
       $accordioncontent["Content"] = "Change Lecturer";
       $accordion[$i]["Content"][1] = $accordioncontent;
+      $accordioncontent = array();
+      $accordioncontent["Tag"] = 'a';
+      $accordioncontent["Attributes"] = 'href="courses.php?action=selectcourse&coursenumber=' . $result[$i]["Number"] . '"';
+      $accordioncontent["Content"] = "Select this course";
+      $accordion[$i]["Content"][2] = $accordioncontent;  
     }
     return $accordion;
   }
@@ -51,12 +56,7 @@
   if (!isset($_SESSION["role"]))
     $_SESSION["role"] = "visitor";
 
-  if ($_SESSION["role"] == "visitor") {
-    $_SESSION["title"] = "";  
-    require_once("header.php");
-    include("view/footerView.php");
-  }
-  else if (isset($_GET["action"])) {
+  if (isset($_GET["action"])) {
     if ($_GET["action"] = "selectcourse") {
       $_SESSION["course_num"] = $_GET["coursenumber"];
       $_SESSION["title"] = $_SESSION["course_num"] . " is selected";
@@ -64,11 +64,16 @@
       include("view/footerView.php");
       return;
     }
+    if ($_SESSION["role"] == "visitor") return;
     if ($_GET["action"] = "updateteacher")
       $form = format_update_teacher($_GET["coursenumber"]);
     display_form($form, "courses.php", "get", "");
   }
   else if (isset($_GET["coursenumber"]) && isset($_GET["teacheremail"])) {
+    if ($_SESSION["role"] != "admin") {
+      display_route_error("You must be an admin to view this page");
+      return;
+    }
     update_course($_GET["coursenumber"], $_GET["teacheremail"]);
     $_SESSION["title"] = "Successfully changed the teacher of " . $_GET["coursenumber"] . " to " . $_GET["teacheremail"];
     require_once("header.php");
@@ -76,6 +81,15 @@
     include("view/footerView.php");
   }
   else {
+    if ($_SESSION["role"] == "visitor") {
+      $_SESSION["title"] = "Preview";  
+      require_once("header.php");
+      $result = get_courses();
+      $grid = format_courses_in_grid($result);
+      display_grid($grid);
+      include("view/footerView.php");
+      return;
+    }  
     if ($_SESSION["role"] != "admin") {
       $_SESSION["title"] = "Select a Course";
       require_once("header.php");

@@ -1,9 +1,7 @@
 <?php
   session_start();
   if (!isset($_SESSION["course_num"])) {
-    require_once("view/errorView.php");
-    display_route_error("You haven't selected a course yet. Login first if you haven't done so.");
-    return;
+    header("Location: courses.php");
   }  
   if (!isset($_SESSION["role"]))
     $_SESSION["role"] = "visitor";
