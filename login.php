@@ -1,6 +1,7 @@
 <?php
   require_once("model/studentModel.php");
   require_once("model/teacherModel.php");
+  require_once("model/adminModel.php");
   require_once("view/formView.php");
 
   function format_login() {
@@ -47,8 +48,13 @@
     $response = is_student_valid($_POST["email"], $_POST["password"]);
     if (strstr($response, "Nonexisting student account") == true) {
       $response = is_teacher_valid($_POST["email"], $_POST["password"]);
-      if (strstr($response, "Nonexisting teacher account") == true)
-        $response = "Nonexisting account";
+      if (strstr($response, "Nonexisting teacher account") == true) {
+        $response = is_admin_valid($_POST["email"], $_POST["password"]);
+        if (strstr($response, "Nonexisting admin account") == true)
+          $response = "Nonexisting account";
+        else
+          $_SESSION["role"] = "admin";
+      }
       else $_SESSION["role"] = "teacher";
     }
     else $_SESSION["role"] = "student";

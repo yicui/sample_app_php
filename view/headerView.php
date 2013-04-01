@@ -32,12 +32,14 @@
       function display_navigation() {
         echo '      <div id="navigation">' . PHP_EOL;
         echo '        <ul>' . PHP_EOL;
+        if ($_SESSION["role"] == "admin")
+          echo '          <li><a href="courses.php">Course Selection</a></li>' . PHP_EOL;
         echo '          <li><a href="syllabus.php">Syllabus</a></li>' . PHP_EOL;
         if ($_SESSION["role"] != "visitor") {
         echo '          <li><a href="lectures.php">Lecture Notes</a></li>' . PHP_EOL;
         echo '          <li><a href="assignments.php">Assignments</a></li>' . PHP_EOL;
         }
-        if ($_SESSION["role"] == "teacher")
+        if ($_SESSION["role"] == "teacher" || $_SESSION["role"] == "admin")
         echo '          <li><a href="students.php">Students</a></li>' . PHP_EOL;
         echo '        </ul>' . PHP_EOL;
         echo '      </div>' . PHP_EOL;
