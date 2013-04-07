@@ -45,17 +45,21 @@
     return;
   }
 
-  if (isset($_GET["coursenumber"]) && isset($_GET["startingfrom"]) && isset($_GET["recordcount"])) {
-    $result = get_lectures($_GET["coursenumber"], $_GET["startingfrom"], $_GET["recordcount"]);
-    $grid = format_lectures_in_grid($result);
-    display_grid($grid);
+  if (isset($_GET["action"])) {
+    if ($_GET["action"] == "loadmore") {
+      $result = get_lectures($_SESSION["course_num"], $_SESSION["lectures_loaded"], 5);
+      $accordion = format_lectures_in_accordion($result);
+      display_accordion($accordion);
+      $_SESSION["lectures_loaded"] += count($result);  
+    }
   }
   else {
     $_SESSION["title"] = "Lecture Notes";
     require_once("header.php");
     $result = get_lectures($_SESSION["course_num"], 0, 5);
-    $grid = format_lectures_in_grid($result, $_SESSION["course_num"]);
-    display_loadmore_paginator("lectures.php?coursenumber=" . $_SESSION["course_num"], "display_grid", $grid, "         ");
+    $_SESSION["lectures_loaded"] = count($result);
+    $accordion = format_lectures_in_accordion($result);
+    display_loadmore_paginator("lectures.php?action=loadmore", "display_accordion", $accordion, "         ");
     include("view/footerView.php");
   }
 ?>

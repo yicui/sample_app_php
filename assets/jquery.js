@@ -24,8 +24,6 @@ $(document).ready(function(){
   // Accordion, date picker, and tooltip
   function initializewidgets(container) {
     $(container).find(".accordion").accordion();
-    // Open the first of the newly-loaded accordion content
-    $(container).find(".accordion").accordion("option", "active", itemCount-recordCount);
     $(container).find(".editinplace span").on("click", edit);
     $(container).find(".editinplace [value='Save']").on("click", save);
     $(container).find(".editinplace [value='Cancel']").on("click", cancel);
@@ -41,20 +39,14 @@ $(document).ready(function(){
   initializewidgets(document); 
   $(document).tooltip();  
   // Loadmore paginator  
-  const recordCount = 5;
-  var itemCount = recordCount;
   $(".loadmorepaginator").click(function() {
-    var url = $(this).attr("href").split('?')[0];
-    var param = $(this).attr("href").split('?')[1];
     var openElement = $(this).parent().prev();
     $.ajax({ 
-      url:url, 
-      data:{coursenumber:param.split('=')[1], startingfrom:itemCount, recordcount:recordCount},
+      url:$(this).attr("href"),
       success:function(html) {
         if ($(html).children().length == 0) {
           openElement.next().hide();  return;
         }
-        itemCount += recordCount;
         openElement.append($(html).children());  destroywidgets(openElement.parent());  initializewidgets(openElement.parent());
       }
     });
