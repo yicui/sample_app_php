@@ -41,6 +41,10 @@
   if (!isset($_SESSION["role"]))
     $_SESSION["role"] = "visitor";
 
+  if (!isset($_SERVER['HTTPS'])) {
+    $url = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    header("Location: " . $url);
+  }
   // process login
   if (isset($_POST["email"]) && isset($_POST["password"])) {
     if ($_SESSION["role"] != "visitor")
